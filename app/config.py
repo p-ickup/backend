@@ -13,7 +13,7 @@ class Config:
     SERVICE_NAME = "pickup-backend"
     SERVICE_VERSION = "0.1.0"
     SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key')
-    ML_SERVICE_URL = os.getenv('ML_SERVICE_URL', 'http://ml:5001')
+    ML_SERVICE_URL = os.getenv('ML_SERVICE_URL', 'http://localhost:5001')
     
     # Supabase configuration
     SUPABASE_URL = os.getenv('SUPABASE_URL')

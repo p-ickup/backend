@@ -1,6 +1,7 @@
 """
 WSGI entry point for production servers.
 """
+from app.monkey import monkey
 import os
 import logging
 from app import create_app
