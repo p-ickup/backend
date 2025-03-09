@@ -54,3 +54,41 @@ def register_health_routes(app):
                 }
             }
         })
+    
+    @app.route('/api/debug-ml-connection', methods=['GET'])
+    def debug_ml_connection():
+        import socket
+        results = {}
+        
+        # 1. Try DNS resolution
+        try:
+            hostname = 'ml.prod.p-ickup.internal'
+            results['dns_lookup'] = {
+                'hostname': hostname,
+                'ip': socket.gethostbyname(hostname)
+            }
+        except Exception as e:
+            results['dns_lookup'] = {'error': str(e)}
+        
+        # 2. Try different service discovery formats
+        urls_to_try = [
+            'http://ml.prod.p-ickup.internal:5001/health',
+            'http://ml:5001/health',
+            'http://ml.p-ickup:5001/health',
+            'http://ml.prod:5001/health'
+        ]
+        
+        results['connection_tests'] = {}
+        for url in urls_to_try:
+            try:
+                import requests
+                # Use a longer timeout
+                response = requests.get(url, timeout=10)
+                results['connection_tests'][url] = {
+                    'status_code': response.status_code,
+                    'response': response.text[:100]
+                }
+            except Exception as e:
+                results['connection_tests'][url] = {'error': str(e)}
+        
+        return jsonify(results)

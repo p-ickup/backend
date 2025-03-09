@@ -22,7 +22,7 @@ def get_prediction(ml_service_url):
         Exception: If the request fails
     """
     try:
-        response = requests.get(f"{ml_service_url}/predict", timeout=5)
+        response = requests.get(f"{ml_service_url}/predict", timeout=10)
         response.raise_for_status()
         return response.json()['prediction']
     except Timeout:
@@ -44,7 +44,7 @@ def check_ml_health(ml_service_url):
         Dict with health status and details or error
     """
     try:
-        response = requests.get(f"{ml_service_url}/health", timeout=2)
+        response = requests.get(f"{ml_service_url}/health", timeout=10)
         if response.status_code == 200:
             return {
                 "status": "available",
