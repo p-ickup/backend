@@ -26,7 +26,14 @@ def create_app(config_name=None):
     app.config.from_object(f'app.config.{config_name.capitalize()}Config')
     
     # Initialize extensions
-    CORS(app)
+    CORS(app, resources={
+    r"/api/*": {
+        "origins": ["https://p-ickup.netlify.app", "http://localhost:3000"],
+        "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": False 
+    }
+})
     
     # Store app start time for health checks
     app.config['START_TIME'] = datetime.now()
